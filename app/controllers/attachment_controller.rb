@@ -10,6 +10,6 @@ class AttachmentController < ApplicationController
     File.open(path, "wb") { |f| f.write(params[:file].read) }
     @attachment = Attachment.new({IdAttachment: id, Title: title, Name: name, Size: params[:file].size, UploadDate: DateTime.now })
     @attachment.save
-    render json: { message: "Hello World", file: @attachment }
+    render json: { message: "Success", file: @attachment }
   end
 end
