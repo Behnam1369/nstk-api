@@ -8,4 +8,10 @@ Rails.application.routes.draw do
   get "/users/:iduser/work_missions/new", to: "work_mission#new"
   get "/users/:iduser/work_missions/:idmission", to: "work_mission#show"
   post "/work_missions", to: "work_mission#save_work_mission"
+
+  get "/users/:iduser/pr/new", to: "pr#new"
+  patch  "/users/:iduser/pr/:idpr/cancel", to: "pr#cancel"
+  patch "/users/:iduser/pr/:idpr/delete", to: "pr#delete"
+  get "/users/:iduser/pr/:idpr", to: "pr#show"
+  post "/pr", to: "pr#save"
 end
