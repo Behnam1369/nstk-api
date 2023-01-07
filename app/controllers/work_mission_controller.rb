@@ -18,6 +18,14 @@ class WorkMissionController < ApplicationController
                                                ]) }
   end
 
+  def payments
+    @work_mission_payments = WorkMissionPayment.where(IdWorkMission: params[:idmission], IdWorkMissioner: params[:idmissioner])
+    render json: { message: 'Success',
+                   vch: @work_mission_payments,
+                   missioner: User.find(params[:idmissioner]) 
+                  }
+  end
+
   def save_work_mission
     @work_mission = WorkMission.new(
       {
@@ -49,5 +57,43 @@ class WorkMissionController < ApplicationController
     end
 
     @work_mission.save
+  end
+
+  def save_payment
+    wmp = WorkMissionPayment.create(work_mission_payment_params)
+    if wmp["IdPaymentType"] == 3
+      wmp["Amount"] = -wmp["Amount"]
+    end
+    wmp.save
+    if wmp.save
+      render json: { message: 'Success' }
+    else
+      render json: { message: 'Failed' }
+    end
+  end
+
+  def delete_payment
+    wmp = WorkMissionPayment.find(params[:idpayment])
+    if wmp.destroy
+      render json: { message: 'Success' }
+    else
+      render json: { message: 'Failed' }
+    end
+  end
+
+  def work_mission_payment_params
+    params.permit(
+      :IdWorkMissionPayment,
+      :IdWorkMission,
+      :IdWorkMissioner,
+      :IdPaymentType,
+      :PaymentType,
+      :Descr,
+      :PaymentDate,
+      :PaymentDateShamsi,
+      :Amount,
+      :IdCur,
+      :Abr
+    )
   end
 end
