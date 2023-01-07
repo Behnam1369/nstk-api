@@ -66,7 +66,6 @@ class PrController < ApplicationController
   private
 
   def pr_params
-    puts params
     params.require(:pr).permit(
       :IdPr,
       :No,
