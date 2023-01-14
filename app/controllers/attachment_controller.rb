@@ -12,4 +12,9 @@ class AttachmentController < ApplicationController
     @attachment.save
     render json: { message: 'Success', file: @attachment }
   end
+
+  def show
+    @attachment = Attachment.find(params[:idfile])
+    render json: { message: 'Success', file: @attachment }
+  end
 end
