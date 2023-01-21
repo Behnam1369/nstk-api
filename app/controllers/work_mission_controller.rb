@@ -20,19 +20,16 @@ class WorkMissionController < ApplicationController
   end
 
   def payments
-    @work_mission_payments = WorkMissionPayment.where(IdWorkMission: params[:idmission], IdWorkMissioner: params[:idmissioner])
+    @work_mission_payments = WorkMissionPayment.where(IdWorkMission: params[:idmission],
+                                                      IdWorkMissioner: params[:idmissioner])
     render json: { message: 'Success',
                    vch: @work_mission_payments,
-                   missioner: User.find(params[:idmissioner]) 
-                  }
+                   missioner: User.find(params[:idmissioner]) }
   end
 
-  
   def save_payment
     wmp = WorkMissionPayment.create(work_mission_payment_params)
-    if wmp["IdPaymentType"] == 3
-      wmp["Amount"] = -wmp["Amount"]
-    end
+    wmp['Amount'] = -wmp['Amount'] if wmp['IdPaymentType'] == 3
     wmp.save
     if wmp.save
       render json: { message: 'Success' }
@@ -67,23 +64,26 @@ class WorkMissionController < ApplicationController
   end
 
   def reports
-    render json: {  
+    render json: {
       message: 'Success',
       reports: WorkMissionReport.where(IdWorkMission: params[:idmission], IdWorkMissioner: params[:idmissioner]),
       missioner: WorkMissioner.where(IdWorkMission: params[:idmission], IdWorkMissioner: params[:idmissioner])[0],
-      achievements: WorkMissionAchievement.where(IdWorkMission: params[:idmission], IdWorkMissioner: params[:idmissioner])
+      achievements: WorkMissionAchievement.where(IdWorkMission: params[:idmission],
+                                                 IdWorkMissioner: params[:idmissioner])
     }
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
   def save_work_mission
     if work_mission_params[:IdWorkMission].nil?
       @work_mission = WorkMission.new(work_mission_params)
-      @work_mission[:Issuer] = User.find(work_mission_params[:IdUser])[:Fname] + " " + User.find(work_mission_params[:IdUser])[:Lname] 
-      @work_mission[:IssueDate] = Date.today 
+      @work_mission[:Issuer] =
+        "#{User.find(work_mission_params[:IdUser])[:Fname]} #{User.find(work_mission_params[:IdUser])[:Lname]}"
+      @work_mission[:IssueDate] = Date.today
       if @work_mission.save
         work_missioners = params[:work_missioners]
         work_missioners.each do |missioner|
-          m = WorkMissioner.new(); 
+          m = WorkMissioner.new
           m.work_mission = @work_mission
           m[:IdUser] = missioner[:IdUser]
           m.save
@@ -92,19 +92,19 @@ class WorkMissionController < ApplicationController
       else
         render json: { message: 'Failed' }
       end
-    else 
+    else
       @work_mission = WorkMission.find(work_mission_params[:IdWorkMission])
       if @work_mission.update(work_mission_params)
-        work_missioners = params[:work_missioners].map { |work_missioner| work_missioner[:IdUser]  }
-        existing_work_missioners = @work_mission.work_missioners.map { |work_missioner| work_missioner[:IdUser]  }
-        
+        work_missioners = params[:work_missioners].map { |work_missioner| work_missioner[:IdUser] }
+        existing_work_missioners = @work_mission.work_missioners.map { |work_missioner| work_missioner[:IdUser] }
+
         WorkMissioner.where(
-          IdWorkMission: @work_mission[:IdWorkMission], 
+          IdWorkMission: @work_mission[:IdWorkMission],
           IdUser: (existing_work_missioners - work_missioners)
         ).destroy_all
 
         (work_missioners - existing_work_missioners).each do |missioner|
-          m = WorkMissioner.new(); 
+          m = WorkMissioner.new
           m.work_mission = @work_mission
           m[:IdUser] = missioner
           m.save
@@ -115,7 +115,9 @@ class WorkMissionController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
 
+  # rubocop:disable Metrics/MethodLength
   def work_mission_params
     params.require(:work_mission).permit(
       :IdWorkMission,
@@ -141,7 +143,7 @@ class WorkMissionController < ApplicationController
       :ResidencePlace,
       :IdPettyCashHolder,
       :PettyCashAmount,
-      :IdCur, 
+      :IdCur,
       :Abr,
       :OtherRequirements,
       :Note,
@@ -156,4 +158,5 @@ class WorkMissionController < ApplicationController
       :OtherFiles
     )
   end
+  # rubocop:enable Metrics/MethodLength
 end

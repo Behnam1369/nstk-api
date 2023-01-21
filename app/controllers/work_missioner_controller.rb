@@ -1,5 +1,4 @@
 class WorkMissionerController < ApplicationController
-  
   def save_report
     @work_missioner = WorkMissioner.find(missioner_params[:IdWorkMissioner])
     @work_missioner.work_mission_reports.destroy_all
@@ -10,7 +9,8 @@ class WorkMissionerController < ApplicationController
       render json: { message: 'Failed' }
     end
   end
-  
+
+  # rubocop:disable Metrics/MethodLength
   def missioner_params
     params.require(:work_missioner).permit(
       :IdWorkMissioner,
@@ -24,25 +24,26 @@ class WorkMissionerController < ApplicationController
       :RoleType,
       :Note,
       :Files,
-      work_mission_reports_attributes: [
-        :IdWorkMissionReport, 
-        :IdWorkMission, 
-        :IdWorkMissioner, 
-        :Subject, 
-        :Date, 
-        :DateShamsi, 
-        :Venue, 
-        :Done, 
-        :ToDo, 
-        :Follower,
-        :Note
-      ], 
-      work_mission_achievements_attributes: [
-        :IdWorkMissionAchievement,
-        :IdWorkMission,
-        :IdWorkMissioner,
-        :Descr
+      work_mission_reports_attributes: %i[
+        IdWorkMissionReport
+        IdWorkMission
+        IdWorkMissioner
+        Subject
+        Date
+        DateShamsi
+        Venue
+        Done
+        ToDo
+        Follower
+        Note
+      ],
+      work_mission_achievements_attributes: %i[
+        IdWorkMissionAchievement
+        IdWorkMission
+        IdWorkMissioner
+        Descr
       ]
     )
   end
+  # rubocop:enable Metrics/MethodLength
 end
