@@ -46,7 +46,7 @@ class PrController < ApplicationController
     end
   end
   # rubocop:enable Metrics/MethodLength
-  
+
   def cancel
     @pr = Pr.find(pr_params[:IdPr])
     if @pr.update(State: 1)
