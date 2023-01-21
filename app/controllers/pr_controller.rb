@@ -3,9 +3,9 @@ class PrController < ApplicationController
     data = {
       curArr: Currency.all.select(:IdCur, :Abr, :Title),
       idDept: User.find(params[:iduser]).roles.first.IdDept,
-      dept: Dl.find(User.find(params[:iduser]).roles.first.IdDept)["Title"]
+      dept: Dl.find(User.find(params[:iduser]).roles.first.IdDept)['Title']
     }
-    render json: { message: 'Success', data: data }
+    render json: { message: 'Success', data: }
   end
 
   def show
@@ -13,17 +13,18 @@ class PrController < ApplicationController
       curArr: Currency.all.select(:IdCur, :Abr, :Title),
       vch: Pr.find(params[:idpr])
     }
-    render json: { message: 'Success', data: data }
+    render json: { message: 'Success', data: }
   end
 
+  # rubocop:disable Metrics/MethodLength
   def save
-    if pr_params[:IdPr].nil? 
+    if pr_params[:IdPr].nil?
       @pr = Pr.new(pr_params)
       abr = Dept.find(@pr[:IdDept])[:Abr]
       yr = @pr[:PrDateShamsi].split('/')[0]
       no = 1
-      if Pr.where("IdDept = ? AND PrDateShamsi LIKE ?", @pr[:IdDept], "#{yr}%").count > 0
-        no = Pr.where("IdDept = ? AND PrDateShamsi LIKE ?", @pr[:IdDept], "#{yr}%").last.No + 1
+      if Pr.where('IdDept = ? AND PrDateShamsi LIKE ?', @pr[:IdDept], "#{yr}%").count.positive?
+        no = Pr.where('IdDept = ? AND PrDateShamsi LIKE ?', @pr[:IdDept], "#{yr}%").last.No + 1
       end
 
       @pr.No = no
@@ -33,8 +34,8 @@ class PrController < ApplicationController
         render json: { message: 'Success', data: @pr }
       else
         render json: { message: 'Error', data: @pr.errors }
-      end 
-    else 
+      end
+    else
       @pr = Pr.find(pr_params[:IdPr])
       if @pr.update(pr_params)
         puts 'updated'
@@ -44,8 +45,9 @@ class PrController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
-  def cancel 
+  def cancel
     @pr = Pr.find(pr_params[:IdPr])
     if @pr.update(State: 1)
       render json: { message: 'Success', data: @pr }
@@ -54,7 +56,7 @@ class PrController < ApplicationController
     end
   end
 
-  def delete 
+  def delete
     @pr = Pr.find(pr_params[:IdPr])
     if @pr.update(State: -1)
       render json: { message: 'Success', data: @pr }
@@ -65,8 +67,8 @@ class PrController < ApplicationController
 
   private
 
+  # rubocop:disable Metrics/MethodLength
   def pr_params
-    puts params
     params.require(:pr).permit(
       :IdPr,
       :No,
@@ -117,4 +119,5 @@ class PrController < ApplicationController
       :State
     )
   end
+  # rubocop:enable Metrics/MethodLength
 end

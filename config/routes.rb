@@ -3,11 +3,17 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  get "/file/:idfile", to: "attachment#show"
   post "/file", to: "attachment#upload"
 
   get "/users/:iduser/work_missions/new", to: "work_mission#new"
   get "/users/:iduser/work_missions/:idmission", to: "work_mission#show"
   post "/work_missions", to: "work_mission#save_work_mission"
+  get "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/payments", to: "work_mission#payments"
+  post "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/payments", to: "work_mission#save_payment"
+  patch "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/payments/:idpayment", to: "work_mission#delete_payment"
+  get "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/reports", to: "work_mission#reports"
+  post "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/reports", to: "work_missioner#save_report"
 
   get "/users/:iduser/pr/new", to: "pr#new"
   patch  "/users/:iduser/pr/:idpr/cancel", to: "pr#cancel"
