@@ -20,4 +20,10 @@ Rails.application.routes.draw do
   patch "/users/:iduser/pr/:idpr/delete", to: "pr#delete"
   get "/users/:iduser/pr/:idpr", to: "pr#show"
   post "/pr", to: "pr#save"
+
+  get "/users/:iduser/purchase_request/new", to: "purchase_request#new"
+  patch  "/users/:iduser/purchase_request/:idpurchaserequest/cancel", to: "purchase_request#cancel"
+  patch "/users/:iduser/purchase_request/:idpurchaserequest/delete", to: "purchase_request#delete"
+  get "/users/:iduser/purchase_request/:idpurchaserequest", to: "purchase_request#show"
+  post "/purchase_request", to: "purchase_request#save"
 end
