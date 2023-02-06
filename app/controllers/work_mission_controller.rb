@@ -117,6 +117,42 @@ class WorkMissionController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/AbcSize
 
+  def show_mission_fee
+    q = "
+    select 
+      a.IdUser, 
+      b.Fname, 
+      b.Lname , 
+      isnull(a.StartDate, c.EstimatedStartDate) as StartDate,
+      isnull(a.StartDateShamsi, c.EstimatedstartdateShamsi) as StartDateShamsi, 
+      isnull(a.StartTime, c.EstimatedstartTime) as StartTime,
+      isnull(a.EndDate, c.EstimatedEndDate) as EndDate,
+      isnull(a.EndDateShamsi, c.EstimatedEnddateShamsi) as EndDateShamsi, 
+      isnull(a.EndTime, c.EstimatedEndTime) as EndTime, 
+      a.MissionDays, 
+      ActualMissionFee, 
+      MissionFeeRate
+from WorkMissioner as a 
+inner join users as b on a.IdUser = b.iduser 
+inner join WorkMission as c on a.IdWorkMission = c.IdWorkMission
+where a.IdWorkMission = #{params[:idmission]}
+    "
+    wm  = ActiveRecord::Base.connection.select_all(q)
+
+    render json: { message: 'Success', wm: wm  }
+  end
+
+  def save_mission_fee
+    params[:_json].each do |wm|
+      missioner = WorkMissioner.where(IdWorkMission: wm[:IdWorkMission], IdUser: wm["IdUser"])[0]
+      missioner["ActualMissionFee"] = wm["ActualMissionFee"]
+      missioner.MissionFeeRate = wm["MissionFeeRate"]
+      missioner.MissionDays = wm["MissionDays"]
+      missioner.save
+    end
+    render json: { message: 'Success'}
+  end
+
   # rubocop:disable Metrics/MethodLength
   def work_mission_params
     params.require(:work_mission).permit(
