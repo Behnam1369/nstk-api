@@ -70,7 +70,6 @@ class PurchaseRequestController < ApplicationController
     end
   end
 
-
   private
 
   def purchase_request_params
