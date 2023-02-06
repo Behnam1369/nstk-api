@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   patch "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/payments/:idpayment", to: "work_mission#delete_payment"
   get "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/reports", to: "work_mission#reports"
   post "/users/:iduser/work_missions/:idmission/missioners/:idmissioner/reports", to: "work_missioner#save_report"
+  get "/users/:iduser/work_missions/:idmission/mission_fee", to: "work_mission#show_mission_fee"
+  patch "/users/:iduser/work_missions/:idmission/mission_fee", to: "work_mission#save_mission_fee"
 
   get "/users/:iduser/pr/new", to: "pr#new"
   patch  "/users/:iduser/pr/:idpr/cancel", to: "pr#cancel"
