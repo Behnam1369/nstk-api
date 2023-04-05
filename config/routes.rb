@@ -33,4 +33,8 @@ Rails.application.routes.draw do
   patch "/users/:iduser/pi_pattern/:idpipattern", to: "pi_pattern#update"
   get "/users/:iduser/pi/:idpi/pi_pattern/:idpipattern", to: "pi_pattern#show"
 
+  post "/users/:iduser/pi_print", to: "pi_print#create"
+  patch "/users/:iduser/pi_print/:idpiprint", to: "pi_print#update"
+  get "/users/:iduser/pi_print/:idpiprint", to: "pi_print#show"
+
 end
