@@ -1,9 +1,8 @@
 class PiPatternController < ApplicationController
-
   def show
     sql = "loadPiPattern @idpi = #{params[:idpi]}, @idpattern = #{params[:idpipattern]}"
     result = ActiveRecord::Base.connection.select_all(sql)
-    render json: { message: 'Success', result: result }
+    render json: { message: 'Success', result: }
   end
 
   def create
@@ -19,12 +18,11 @@ class PiPatternController < ApplicationController
     @pi_pattern = PiPattern.find(params[:idpipattern])
     @pi_pattern.pi_pattern_itms.destroy_all
     if @pi_pattern.update(pi_pattern_params)
-      render json: { message: 'Success', data: @pi_pattern }   
+      render json: { message: 'Success', data: @pi_pattern }
     else
       render json: { message: 'Failed', error: @pi_pattern.errors }
     end
   end
-    
 
   def pi_pattern_params
     params.require(:pi_pattern).permit(
