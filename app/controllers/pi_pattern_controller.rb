@@ -30,6 +30,7 @@ class PiPatternController < ApplicationController
     params.require(:pi_pattern).permit(
       :VchType,
       :Title,
+      :ThirdParty,
       pi_pattern_itms_attributes:
       %i[Title Formula Text Type]
     )
