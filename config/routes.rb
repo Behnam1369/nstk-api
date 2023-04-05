@@ -28,4 +28,13 @@ Rails.application.routes.draw do
   patch "/users/:iduser/purchase_request/:idpurchaserequest/delete", to: "purchase_request#delete"
   get "/users/:iduser/purchase_request/:idpurchaserequest", to: "purchase_request#show"
   post "/purchase_request", to: "purchase_request#save"
+
+  post "/users/:iduser/pi_pattern", to: "pi_pattern#create"
+  patch "/users/:iduser/pi_pattern/:idpipattern", to: "pi_pattern#update"
+  get "/users/:iduser/pi/:idpi/pi_pattern/:idpipattern", to: "pi_pattern#show"
+
+  post "/users/:iduser/pi_print", to: "pi_print#create"
+  patch "/users/:iduser/pi_print/:idpiprint", to: "pi_print#update"
+  get "/users/:iduser/pi_print/:idpiprint", to: "pi_print#show"
+
 end
