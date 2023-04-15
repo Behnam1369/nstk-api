@@ -37,4 +37,6 @@ Rails.application.routes.draw do
   patch "/users/:iduser/pi_print/:idpiprint", to: "pi_print#update"
   get "/users/:iduser/pi_print/:idpiprint", to: "pi_print#show"
 
+  get "/users/:iduser/pi/:idpi/soa", to: "pi#soa"
+
 end
