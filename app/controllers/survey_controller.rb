@@ -22,7 +22,7 @@ class SurveyController < ApplicationController
   end
 
   def show
-    survey = Survey.find(params[:id])
+    survey = Survey.find(params[:idsurvey])
     render json: { message: 'Success', data: survey.as_json(include: { survey_questions: { include: :survey_question_options } }) }
   end
   
