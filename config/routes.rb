@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   get "/users/:iduser/pi/:idpi/soa", to: "pi#soa"
 
   get "/users/:iduser/survey", to: "survey#index"
+  get "/users/:iduser/survey/:idsurvey", to: "survey#show"
   post "/users/:iduser/survey", to: "survey#create"
   patch "/users/:iduser/survey/:idsurvey", to: "survey#update"
   delete "/users/:iduser/survey/:idsurvey", to: "survey#destroy"
