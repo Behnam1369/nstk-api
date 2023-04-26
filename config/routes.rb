@@ -39,4 +39,12 @@ Rails.application.routes.draw do
 
   get "/users/:iduser/pi/:idpi/soa", to: "pi#soa"
 
+  get "/users/:iduser/survey", to: "survey#index"
+  get "/users/:iduser/survey/:idsurvey", to: "survey#show"
+  get "/users/:iduser/survey/:idsurvey/result", to: "survey#result"
+  post "/users/:iduser/survey", to: "survey#create"
+  patch "/users/:iduser/survey/:idsurvey", to: "survey#update"
+  delete "/users/:iduser/survey/:idsurvey", to: "survey#destroy"
+  post "/users/:iduser/survey/:idsurvey/vote", to: "survey#vote"
+
 end
