@@ -107,6 +107,7 @@ class PrController < ApplicationController
       :ContractPaymentType,
       :ContractNo,
       :ContractDate,
+      :ContractDateShamsi,
       :IdCreditorType,
       :CreditorType,
       :CreditorTitle,

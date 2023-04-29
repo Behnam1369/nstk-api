@@ -22,8 +22,42 @@ class SurveyController < ApplicationController
   end
 
   def show
-    survey = Survey.find(params[:idsurvey])
-    render json: { message: 'Success', data: survey.as_json(include: { survey_questions: { include: :survey_question_options } }) }
+    sql = "
+    declare @iduser int = ?
+    declare @idsurvey int = ?
+    select cast((select
+      *,
+      (
+        select 
+          *, 
+          (
+            select 
+              * ,
+              (
+                case when exists(
+                  select * from SurveyAnswer 
+                  where 
+                    IdSurveyQuestion = SurveyQuestion.IdSurveyQuestion and 
+                    IdSurveyQuestionOption = SurveyQuestionOption.IdSurveyQuestionOption and 
+                    iduser = @iduser
+                ) then 'true' else 'false' end
+              ) as Selected 
+            from SurveyQuestionOption
+            where IdSurveyQuestion = SurveyQuestion.IdSurveyQuestion
+            for json path, include_null_values
+          ) as survey_question_options
+        from SurveyQuestion where IdSurvey = @idsurvey
+        for json path, include_null_values
+      ) as survey_questions
+    from survey where IdSurvey = @idsurvey 
+    for json path, include_null_values, without_array_wrapper) as nvarchar(max)) as data
+    "
+    
+    data = ActiveRecord::Base.connection.select_all(
+      ApplicationRecord.sanitize_sql([sql, params[:iduser], params[:idsurvey]])
+    )
+
+    render json: { message: 'Success', data:  }
   end
 
   def result
