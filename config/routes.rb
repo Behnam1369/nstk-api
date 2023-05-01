@@ -47,4 +47,13 @@ Rails.application.routes.draw do
   delete "/users/:iduser/survey/:idsurvey", to: "survey#destroy"
   post "/users/:iduser/survey/:idsurvey/vote", to: "survey#vote"
 
+
+  get "users/:iduser/market_report", to: "market_report#index"
+  get "users/:iduser/market_report/:idmarketreport", to: "market_report#show"
+  post "users/:iduser/market_report", to: "market_report#create"
+  patch "users/:iduser/market_report/:idmarketreport", to: "market_report#update"
+  delete "users/:iduser/market_report/:idmarketreport", to: "market_report#destroy"
+  get "users/:iduser/market_report/market_search/:search_term", to: "market_report#top_5_markets_suggestions"
+  get "users/:iduser/market_report/product_search/:search_term", to: "market_report#top_5_products_suggestions"
+
 end
