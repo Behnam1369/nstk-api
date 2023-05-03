@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   post "/users/:iduser/survey/:idsurvey/vote", to: "survey#vote"
 
 
-  get "users/:iduser/market_report", to: "market_report#index"
+  get "users/:iduser/market_report/search/:search_text", to: "market_report#index"
   get "users/:iduser/market_report/:idmarketreport", to: "market_report#show"
   post "users/:iduser/market_report", to: "market_report#create"
   patch "users/:iduser/market_report/:idmarketreport", to: "market_report#update"
