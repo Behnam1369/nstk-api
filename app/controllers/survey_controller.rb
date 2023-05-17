@@ -12,6 +12,7 @@ class SurveyController < ApplicationController
         @iduser not in (select substr from dbo.split(',', Exclude)) or 
         @iduser not in (select iduser from UserGroupMembers where IdGroup in (select substr from dbo.split(',', Exclude)))
       )
+      and getdate() > starttime
     "
 
     data = ActiveRecord::Base.connection.select_all(
