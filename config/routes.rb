@@ -56,6 +56,14 @@ Rails.application.routes.draw do
   get "users/:iduser/market_report/product_search/:search_term", to: "market_report#top_5_products_suggestions"
 
   get "users/:iduser/loan/new", to: "loan#new"
+  get "users/:iduser/loan/:idloan/edit", to: "loan#edit"
   post "users/:iduser/loan", to: "loan#create"
+  patch "users/:iduser/loan/:idloan/send_to_dept_manager", to: "loan#send_to_dept_manager"
+  patch "users/:iduser/loan/:idloan/send_to_hr", to: "loan#send_to_hr"
+  patch "users/:iduser/loan/:idloan/send_to_ceo", to: "loan#send_to_ceo"
+  patch "users/:iduser/loan/:idloan/send_to_finance", to: "loan#send_to_finance"
+  patch "users/:iduser/loan/:idloan/reject_by_dept_manager", to: "loan#reject_by_dept_manager"
+  patch "users/:iduser/loan/:idloan/reject_by_hr", to: "loan#reject_by_hr"
+  patch "users/:iduser/loan/:idloan/reject_by_ceo", to: "loan#reject_by_ceo"
 
 end
