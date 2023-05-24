@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   patch "users/:iduser/loan/:idloan/send_to_hr", to: "loan#send_to_hr"
   patch "users/:iduser/loan/:idloan/send_to_ceo", to: "loan#send_to_ceo"
   patch "users/:iduser/loan/:idloan/send_to_finance", to: "loan#send_to_finance"
+  patch "users/:iduser/loan/:idloan/confirm_payment", to: "loan#confirm_payment"
   patch "users/:iduser/loan/:idloan/reject_by_dept_manager", to: "loan#reject_by_dept_manager"
   patch "users/:iduser/loan/:idloan/reject_by_hr", to: "loan#reject_by_hr"
   patch "users/:iduser/loan/:idloan/reject_by_ceo", to: "loan#reject_by_ceo"
