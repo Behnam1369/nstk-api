@@ -47,7 +47,6 @@ Rails.application.routes.draw do
   delete "/users/:iduser/survey/:idsurvey", to: "survey#destroy"
   post "/users/:iduser/survey/:idsurvey/vote", to: "survey#vote"
 
-
   get "users/:iduser/market_report/search/:search_text", to: "market_report#index"
   get "users/:iduser/market_report/:idmarketreport", to: "market_report#show"
   post "users/:iduser/market_report", to: "market_report#create"
@@ -55,5 +54,17 @@ Rails.application.routes.draw do
   delete "users/:iduser/market_report/:idmarketreport", to: "market_report#destroy"
   get "users/:iduser/market_report/market_search/:search_term", to: "market_report#top_5_markets_suggestions"
   get "users/:iduser/market_report/product_search/:search_term", to: "market_report#top_5_products_suggestions"
+
+  get "users/:iduser/loan/new", to: "loan#new"
+  get "users/:iduser/loan/:idloan/edit", to: "loan#edit"
+  post "users/:iduser/loan", to: "loan#create"
+  patch "users/:iduser/loan/:idloan/send_to_dept_manager", to: "loan#send_to_dept_manager"
+  patch "users/:iduser/loan/:idloan/send_to_hr", to: "loan#send_to_hr"
+  patch "users/:iduser/loan/:idloan/send_to_ceo", to: "loan#send_to_ceo"
+  patch "users/:iduser/loan/:idloan/send_to_finance", to: "loan#send_to_finance"
+  patch "users/:iduser/loan/:idloan/confirm_payment", to: "loan#confirm_payment"
+  patch "users/:iduser/loan/:idloan/reject_by_dept_manager", to: "loan#reject_by_dept_manager"
+  patch "users/:iduser/loan/:idloan/reject_by_hr", to: "loan#reject_by_hr"
+  patch "users/:iduser/loan/:idloan/reject_by_ceo", to: "loan#reject_by_ceo"
 
 end

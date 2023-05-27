@@ -3,5 +3,5 @@ class PiController < ApplicationController
     sql = "CustomerSOA @idpi = #{params[:idpi]}"
     result = ActiveRecord::Base.connection.select_all(sql)
     render json: { message: 'Success', result: }
-  end 
+  end
 end

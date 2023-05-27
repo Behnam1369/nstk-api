@@ -1,12 +1,10 @@
-
 class MarketReportController < ApplicationController
- 
   def index
     search_text = params[:search_text] == 'all' ? '' : params[:search_text]
     search_text.gsub(' ', '')
     # find all reports that contain search text in title or market or product
-    market_reports = MarketReport.where(State: nil).
-    where("replace(Title, ' ', '') LIKE ? OR replace(Market, ' ','') LIKE ? OR replace(Product,' ','') LIKE ?", "%#{search_text}%", "%#{search_text}%", "%#{search_text}%")
+    market_reports = MarketReport.where(State: nil)
+      .where("replace(Title, ' ', '') LIKE ? OR replace(Market, ' ','') LIKE ? OR replace(Product,' ','') LIKE ?", "%#{search_text}%", "%#{search_text}%", "%#{search_text}%")
 
     render json: market_reports
   end
@@ -37,7 +35,7 @@ class MarketReportController < ApplicationController
 
   def destroy
     @market_report = MarketReport.find(params[:idmarketreport])
-    @market_report[:State] = -1; 
+    @market_report[:State] = -1
     if @market_report.save
       render json: @market_report
     else
@@ -46,7 +44,7 @@ class MarketReportController < ApplicationController
   end
 
   def top_5_markets_suggestions
-    search_term = params[:search_term] == "all" ? '' :  params[:search_term]
+    search_term = params[:search_term] == 'all' ? '' : params[:search_term]
     markets = {}
     MarketReport.where(State: nil).each do |market_report|
       market_report.Market.split(',').each do |market|
@@ -59,7 +57,7 @@ class MarketReportController < ApplicationController
   end
 
   def top_5_products_suggestions
-    search_term = params[:search_term] == "all" ? '' :  params[:search_term]
+    search_term = params[:search_term] == 'all' ? '' : params[:search_term]
     products = {}
     MarketReport.where(State: nil).each do |market_report|
       market_report.Product.split(',').each do |product|
@@ -80,9 +78,8 @@ class MarketReportController < ApplicationController
       :ReportDate,
       :ReportDateShamsi,
       :IdFiles,
-      :IssuedBy, 
+      :IssuedBy,
       :State
     )
   end
 end
-

@@ -3,4 +3,8 @@ class Dept < ApplicationRecord
 
   self.table_name = 'Dl_Dept'
   self.primary_key = 'IdDl'
+
+  def manager
+    Role.find(self[:IdManager]).user
+  end
 end
