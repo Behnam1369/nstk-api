@@ -1,16 +1,16 @@
 class LoanController < ApplicationController
-include ShamsiDateHelper
+  include ShamsiDateHelper
 
   def new
     q = "
       declare @iduser int = ?
-      select cast((select 
-        (select * from loanType for json auto) as LoanTypes , 
-        dbo.GrossSalary(idwinkart) as GrossSalary, 
+      select cast((select
+        (select * from loanType for json auto) as LoanTypes ,
+        dbo.GrossSalary(idwinkart) as GrossSalary,
         dbo.EmploymentMonth(idwinkart) as EmploymentMonth,
         dbo.HierarchyLevel(iduser) as HierarchyLevel,
         dbo.ActiveMonthlyInstallments(idwinkart) as ActiveMonthlyInstallments,
-        fname + ' ' + lname as FullName , 
+        fname + ' ' + lname as FullName ,
         IdWinkart as PerNo
         from users where iduser = @iduser for json path, include_null_values) as nvarchar(max)) as data
     "
@@ -24,16 +24,16 @@ include ShamsiDateHelper
 
   def edit
     q = "
-      declare @idloan int = ? 
+      declare @idloan int = ?
       declare @iduser int = (select iduser from loan where idloan = @idloan)
-      select cast((select 
-        (select * from loan where idloan = @idloan for json auto,include_null_values, without_array_wrapper) as Loan, 
-        (select * from loanType for json auto) as LoanTypes , 
-        dbo.GrossSalary(idwinkart) as GrossSalary, 
+      select cast((select
+        (select * from loan where idloan = @idloan for json auto,include_null_values, without_array_wrapper) as Loan,
+        (select * from loanType for json auto) as LoanTypes ,
+        dbo.GrossSalary(idwinkart) as GrossSalary,
         dbo.EmploymentMonth(idwinkart) as EmploymentMonth,
         dbo.HierarchyLevel(iduser) as HierarchyLevel,
         dbo.ActiveMonthlyInstallments(idwinkart) as ActiveMonthlyInstallments,
-        fname + ' ' + lname as FullName , 
+        fname + ' ' + lname as FullName ,
         IdWinkart as PerNo,
         (select string_agg(idrole, ',') from role where iduser = #{params[:iduser]}) as Roles,
         (select string_agg(idgroup, ',') from UserGroupMembers where iduser = #{params[:iduser]}) as UserGroups
@@ -120,7 +120,7 @@ include ShamsiDateHelper
     @loan.Step = 'در انتظار پرداخت'
     @loan.CeoConfirmDate = DateTime.now
     @loan.CeoConfirmDateShamsi = shamsi_date(DateTime.now)
-    finance_users = UserGroup.find(109).users.map{ |user|  user.IdUser }.join(",")
+    finance_users = UserGroup.find(109).users.map(&:IdUser).join(',')
     @loan.IdFin = finance_users
 
     if @loan.save
@@ -140,7 +140,7 @@ include ShamsiDateHelper
     @loan.Fin = User.find(params[:iduser]).full_name
     @loan.InstallmentFirstMonth = params[:InstallmentFirstMonth]
     @loan.InstallmentLastMonth = params[:InstallmentLastMonth]
-    
+
     if @loan.save
       render json: { message: 'Success', loan: @loan }
     else
@@ -155,7 +155,7 @@ include ShamsiDateHelper
     @loan.ManagerConfirmDateShamsi = shamsi_date(DateTime.now)
     dept_manager = User.find(params[:iduser])
     @loan.Step = -1
-    @loan.State = 'عدم تایید توسط ' + dept_manager.full_name
+    @loan.State = "عدم تایید توسط #{dept_manager.full_name}"
     if @loan.save
       render json: { message: 'Success', loan: @loan }
     else
@@ -170,7 +170,7 @@ include ShamsiDateHelper
     @loan.HrConfirmDateShamsi = shamsi_date(DateTime.now)
     hr = User.find(params[:iduser])
     @loan.Step = -1
-    @loan.State = 'عدم تایید توسط ' + hr.full_name
+    @loan.State = "عدم تایید توسط #{hr.full_name}"
     if @loan.save
       render json: { message: 'Success', loan: @loan }
     else
@@ -184,7 +184,7 @@ include ShamsiDateHelper
     @loan.CeoConfirmDate = DateTime.now
     @loan.CeoConfirmDateShamsi = shamsi_date(DateTime.now)
     @loan.Step = -1
-    @loan.State = 'عدم تایید توسط ' + @loan.Ceo
+    @loan.State = "عدم تایید توسط #{@loan.Ceo}"
     if @loan.save
       render json: { message: 'Success', loan: @loan }
     else
@@ -224,5 +224,4 @@ include ShamsiDateHelper
       :HrConfirmDateShamsi
     )
   end
-
 end

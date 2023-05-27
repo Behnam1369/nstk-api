@@ -2,12 +2,9 @@ require 'date'
 
 module ShamsiDateHelper
   def shamsi_date(gdt)
-    
-    if !gdt.instance_of? String
-      gdt = gdt.strftime('%Y-%m-%d')
-    end
+    gdt = gdt.strftime('%Y-%m-%d') unless gdt.instance_of? String
 
-    res = ""
+    res = ''
     unless gdt.empty?
       g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
       j_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29]
@@ -17,20 +14,20 @@ module ShamsiDateHelper
       gm = gdt[5, 2].to_i - 1
       gd = gdt[8, 2].to_i - 1
 
-      g_day_no = 365 * gy + (gy + 3) / 4 - (gy + 99) / 100 + (gy + 399) / 400
+      g_day_no = (365 * gy) + ((gy + 3) / 4) - ((gy + 99) / 100) + ((gy + 399) / 400)
 
       (0...gm).each { |i| g_day_no += g_days_in_month[i] }
-      if gm > 1 && ((gy % 4 == 0 && gy % 100 != 0) || gy % 400 == 0)
+      if gm > 1 && (((gy % 4).zero? && gy % 100 != 0) || (gy % 400).zero?)
         g_day_no += 1 # leap and after Feb
       end
       g_day_no += gd
 
       j_day_no = g_day_no - 79
 
-      j_np = j_day_no / 12053 # 12053 = 365*33 + 32/4
-      j_day_no %= 12053
+      j_np = j_day_no / 12_053 # 12053 = 365*33 + 32/4
+      j_day_no %= 12_053
 
-      jy = 979 + 33 * j_np + 4 * (j_day_no / 1461) # 1461 = 365*4 + 4/4
+      jy = 979 + (33 * j_np) + (4 * (j_day_no / 1461)) # 1461 = 365*4 + 4/4
 
       j_day_no %= 1461
 
@@ -52,7 +49,7 @@ module ShamsiDateHelper
       jalali[2] = jd
 
       res = "#{jy}/#{jm}/#{jd}"
-      z = res.split("/")
+      z = res.split('/')
       res = "#{z[0]}/#{z[1].rjust(2, '0')}/#{z[2].rjust(2, '0')}"
     end
 

@@ -7,11 +7,11 @@ class User < ApplicationRecord
   self.table_name = 'Users'
   self.primary_key = 'IdUser'
 
-  def full_name 
-    self.Fname + ' ' + self.Lname
+  def full_name
+    "#{self.Fname} #{self.Lname}"
   end
 
   def dept
-    self.roles.first.dept
+    roles.first.dept
   end
 end
