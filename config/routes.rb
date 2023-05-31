@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   patch  "/users/:iduser/purchase_request/:idpurchaserequest/cancel", to: "purchase_request#cancel"
   patch "/users/:iduser/purchase_request/:idpurchaserequest/delete", to: "purchase_request#delete"
   get "/users/:iduser/purchase_request/:idpurchaserequest", to: "purchase_request#show"
+  get "/purchase_request/get_trade_size", to: "purchase_request#get_trade_size"
   post "/purchase_request", to: "purchase_request#save"
 
   post "/users/:iduser/pi_pattern", to: "pi_pattern#create"
