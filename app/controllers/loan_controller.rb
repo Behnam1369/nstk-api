@@ -11,7 +11,8 @@ class LoanController < ApplicationController
         dbo.HierarchyLevel(iduser) as HierarchyLevel,
         dbo.ActiveMonthlyInstallments(idwinkart) as ActiveMonthlyInstallments,
         fname + ' ' + lname as FullName ,
-        IdWinkart as PerNo
+        IdWinkart as PerNo,
+        (select string_agg(idgroup, ',') from UserGroupMembers where iduser = #{params[:iduser]}) as UserGroups
         from users where iduser = @iduser for json path, include_null_values) as nvarchar(max)) as data
     "
 
@@ -77,6 +78,8 @@ class LoanController < ApplicationController
   def send_to_hr
     @loan = Loan.find(params[:idloan])
     @loan.ManagerNote = params[:Note]
+    @loan.PerformanceScore = params[:PerformanceScore]
+    @loan.Score = params[:Score]
     @loan.IdStep = 3
     @loan.Step = 'در حال بررسی توسط منابع انسانی'
     @loan.ManagerConfirmDate = DateTime.now
@@ -95,6 +98,8 @@ class LoanController < ApplicationController
   def send_to_ceo
     @loan = Loan.find(params[:idloan])
     @loan.HrNote = params[:Note]
+    @loan.MonthsOtherCompanies = params[:MonthsOtherCompanies]
+    @loan.Score = params[:Score]
     @loan.IdStep = 4
     @loan.Step = 'در انتظار تایید مدیرعامل'
     @loan.HrConfirmDate = DateTime.now
@@ -221,7 +226,14 @@ class LoanController < ApplicationController
       :Hr,
       :HrNote,
       :HrConfirmDate,
-      :HrConfirmDateShamsi
+      :HrConfirmDateShamsi, 
+      :FinNote, 
+      :MonthsInCompany,
+      :MonthsOtherCompanies,
+      :HierarchyScore,
+      :RiskScore,
+      :PerformanceScore,
+      :Score
     )
   end
 end
