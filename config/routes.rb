@@ -68,4 +68,13 @@ Rails.application.routes.draw do
   patch "users/:iduser/loan/:idloan/reject_by_hr", to: "loan#reject_by_hr"
   patch "users/:iduser/loan/:idloan/reject_by_ceo", to: "loan#reject_by_ceo"
 
+  get "users/:iduser/contract/new", to: "contract#new"
+  get "users/:iduser/contract/:idcontract", to: "contract#show"
+  post "users/:iduser/contract", to: "contract#create"
+  patch "users/:iduser/contract/:idcontract", to: "contract#update"
+  patch "users/:iduser/contract/:idcontract/cancel", to: "contract#cancel"
+  patch "users/:iduser/contract/:idcontract/recover", to: "contract#recover"
+  delete "users/:iduser/contract/:idcontract", to: "contract#destroy"
+
+
 end
