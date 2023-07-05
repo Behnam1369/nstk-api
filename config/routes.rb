@@ -76,5 +76,8 @@ Rails.application.routes.draw do
   patch "users/:iduser/contract/:idcontract/recover", to: "contract#recover"
   delete "users/:iduser/contract/:idcontract", to: "contract#destroy"
 
-
+  get "users/:iduser/suggestion", to: "suggestion#new"
+  get "users/:iduser/suggestion/:idsuggestion", to: "suggestion#show"
+  post "users/:iduser/suggestion", to: "suggestion#create"
+  patch "users/:iduser/suggestion/:idsuggestion", to: "suggestion#update"
 end
