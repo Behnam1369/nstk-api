@@ -115,6 +115,8 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.2-x64-mingw-ucrt)
       racc (~> 1.4)
+    nokogiri (1.15.2-x64-mingw32)
+      racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.3)
       ast (~> 2.4.1)
@@ -178,6 +180,8 @@ GEM
     timeout (0.4.0)
     tiny_tds (0.7.0)
       mini_portile (= 0.6.2)
+    tiny_tds (0.7.0-x64-mingw32)
+      mini_portile (= 0.6.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2023.3)
@@ -190,6 +194,7 @@ GEM
 
 PLATFORMS
   x64-mingw-ucrt
+  x64-mingw32
 
 DEPENDENCIES
   activerecord-sqlserver-adapter
@@ -200,11 +205,11 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.0.3, >= 7.0.3.1)
   rubocop (>= 1.0, < 2.0)
-  tiny_tds (~> 0.7.0)
+  tiny_tds
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.0.6p216
 
 BUNDLED WITH
-   2.3.7
+   2.4.19
