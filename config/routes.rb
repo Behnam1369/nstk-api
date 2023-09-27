@@ -80,4 +80,12 @@ Rails.application.routes.draw do
   get "users/:iduser/suggestion/:idsuggestion", to: "suggestion#show"
   post "users/:iduser/suggestion", to: "suggestion#create"
   patch "users/:iduser/suggestion/:idsuggestion", to: "suggestion#update"
+
+  post "voyage_dates/voyage_date_items", to: "voyage_date#get_voyage_date_items"
+  get "voyage_dates/voyages_dates", to: "voyage_date#get_voyages_dates"
+  post "users/:iduser/voyage_dates/register", to: "voyage_date#register"
+  post "users/:iduser/voyage_dates/clear", to: "voyage_date#clear"
+  post "users/:iduser/voyage_dates/increment", to: "voyage_date#increment"
+  post "users/:iduser/voyage_dates/decrement", to: "voyage_date#decrement"
+  
 end
