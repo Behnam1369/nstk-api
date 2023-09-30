@@ -87,5 +87,10 @@ Rails.application.routes.draw do
   post "users/:iduser/voyage_dates/clear", to: "voyage_date#clear"
   post "users/:iduser/voyage_dates/increment", to: "voyage_date#increment"
   post "users/:iduser/voyage_dates/decrement", to: "voyage_date#decrement"
+
+  get "personnel/:idwinkart", to: "user#show"
+  get "personnel/:idwinkart/birthdays", to: "user#birthdays"
+  post "personnel/:idwinkart/save_birthdays", to: "user#save_birthdays"
+
   
 end
