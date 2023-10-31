@@ -92,5 +92,11 @@ Rails.application.routes.draw do
   get "personnel/:idwinkart/birthdays", to: "user#birthdays"
   post "personnel/:idwinkart/save_birthdays", to: "user#save_birthdays"
 
+  get "users/:iduser/rides/new", to: "ride#new"
+  get "users/:iduser/rides/:idride", to: "ride#show"
+  post "users/:iduser/rides", to: "ride#create"
+  patch "users/:iduser/rides/:idride/admin_confirm", to: "ride#admin_confirm"
+  patch "users/:iduser/rides/:idride/user_confirm", to: "ride#user_confirm"
+  patch "users/:iduser/rides/:idride", to: "ride#update"
   
 end
