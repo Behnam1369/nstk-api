@@ -5,7 +5,15 @@ class RideController < ApplicationController
     role = user.roles.first
     dept = role.dept
 
-    render json: {IdUser: user.IdUser, FullName: user.full_name ,IdRole: role.IdRole, Role: role.Title, IdDept: dept.IdDl, Dept: dept.dl.Title }
+    render json: {
+      IdUser: user.IdUser, 
+      FullName: user.full_name,
+      FinalUser: user.full_name,
+      IdRole: role.IdRole, 
+      Role: role.Title, 
+      IdDept: dept.IdDl, 
+      Dept: dept.dl.Title 
+    }
   end
 
   def show
@@ -68,6 +76,8 @@ class RideController < ApplicationController
       :Role,
       :IdDept,
       :Dept,
+      :RequestForOthers,
+      :FinalUser,
       :IdDriver,
       :Driver,
       :IdRideType,
