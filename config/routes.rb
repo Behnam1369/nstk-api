@@ -98,5 +98,18 @@ Rails.application.routes.draw do
   patch "users/:iduser/rides/:idride/admin_confirm", to: "ride#admin_confirm"
   patch "users/:iduser/rides/:idride/user_confirm", to: "ride#user_confirm"
   patch "users/:iduser/rides/:idride", to: "ride#update"
+
+  get "users/:iduser/employment_letter/new", to: "employment_letter#new"
+  get "users/:iduser/employment_letter/:idemploaymentletter/edit", to: "employment_letter#edit"
+  post "users/:iduser/employment_letter", to: "employment_letter#create"
+  patch "users/:iduser/employment_letter/:idemploaymentletter", to: "employment_letter#update"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/send_to_dept_manager", to: "employment_letter#send_to_dept_manager"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/send_to_hr", to: "employment_letter#send_to_hr"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/send_to_ceo", to: "employment_letter#send_to_ceo"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/send_to_finance", to: "employment_letter#send_to_finance"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/confirm_payment", to: "employment_letter#confirm_payment"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/reject_by_dept_manager", to: "employment_letter#reject_by_dept_manager"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/reject_by_hr", to: "employment_letter#reject_by_hr"
+  patch "users/:iduser/employment_letter/:idemploaymentletter/reject_by_ceo", to: "employment_letter#reject_by_ceo"
   
 end
