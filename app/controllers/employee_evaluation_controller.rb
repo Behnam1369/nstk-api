@@ -33,7 +33,8 @@ class EmployeeEvaluationController < ApplicationController
       b.ManagerSubmitDate, 
       b.ManagerSubmitDate0,
       f.Fname, 
-      f.Lname
+      f.Lname,
+      a.RatingStartDate
     from EmployeeEvaluation as a
     inner join EmployeeEvaluationUser as b on a.IdEmployeeEvaluation = b.IdEmployeeEvaluation
     inner join EmployeeEvaluationQuestion as c on b.IdQuestionGroup = c.IdQuestionGroup
