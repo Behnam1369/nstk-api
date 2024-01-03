@@ -52,6 +52,7 @@ class EmployeeEvaluationController < ApplicationController
 
     where b.IdEmployeeEvaluationUser = @idemployeeevaluationuser
     and c.Active = 1
+    order by c.IdEmpolyeeEvaluationQuestion
     "
 
     data = ActiveRecord::Base.connection.select_all(
