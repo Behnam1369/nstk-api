@@ -113,7 +113,7 @@ Rails.application.routes.draw do
   patch "users/:iduser/employment_letter/:idemploaymentletter/reject_by_ceo", to: "employment_letter#reject_by_ceo"
 
   get "users/:iduser/employee_evaluations", to: "employee_evaluation#index"
-  get "users/:iduser/employee_evaluations/:idemployeeevaluationuser", to: "employee_evaluation#show"
-  post "users/:iduser/employee_evaluations/:idemployeeevaluationuser/save", to: "employee_evaluation#save"
+  get "users/:iduser/employee_evaluations/:id_employee/quarter/:quarter", to: "employee_evaluation#show"
+  post "users/:iduser/employee_evaluations/:id_employee/quarter/:quarter/save", to: "employee_evaluation#save"
   
 end
