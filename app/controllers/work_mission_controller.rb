@@ -86,7 +86,11 @@ class WorkMissionController < ApplicationController
         work_missioners.each do |missioner|
           m = WorkMissioner.new
           m.work_mission = @work_mission
-          m[:IdUser] = missioner[:IdUser]
+          if missioner[:IdUser]
+            m[:IdUser] = missioner[:IdUser]
+          else
+            m[:FullName] = missioner[:FullName]
+          end
           m.save
         end
         render json: { message: 'Success', work_mission: @work_mission }
@@ -96,20 +100,58 @@ class WorkMissionController < ApplicationController
     else
       @work_mission = WorkMission.find(work_mission_params[:IdWorkMission])
       if @work_mission.update(work_mission_params)
-        work_missioners = params[:work_missioners].map { |work_missioner| work_missioner[:IdUser] }
-        existing_work_missioners = @work_mission.work_missioners.map { |work_missioner| work_missioner[:IdUser] }
+        work_missioners = params[:work_missioners].map { |work_missioner| 
+          {
+            iduser: work_missioner[:IdUser] , 
+            fullname: work_missioner[:FullName]
+          }
+        }
 
-        WorkMissioner.where(
-          IdWorkMission: @work_mission[:IdWorkMission],
-          IdUser: (existing_work_missioners - work_missioners)
-        ).destroy_all
+        existing_work_missioners = @work_mission.work_missioners.map { |work_missioner| 
+          {
+            IdWorkMissioner: work_missioner[:IdWorkMissioner],
+            iduser: work_missioner[:IdUser] , 
+            fullname: work_missioner[:FullName]
+          }
+        }
 
-        (work_missioners - existing_work_missioners).each do |missioner|
-          m = WorkMissioner.new
-          m.work_mission = @work_mission
-          m[:IdUser] = missioner
-          m.save
+        # remove deleted missioners
+        existing_work_missioners.each do |missioner|
+          if work_missioners.select { |wm| ( !wm[:iduser].nil? && wm[:iduser] == missioner[:iduser]) || wm[:fullname] == missioner[:fullname]  }.empty?
+            WorkMissioner.find(missioner[:IdWorkMissioner]).destroy
+          end
         end
+
+
+        work_missioners.each do |missioner|
+          if existing_work_missioners.select { |wm| ( !wm[:iduser].nil? && wm[:iduser] == missioner[:iduser]) || wm[:fullname] == missioner[:fullname]  }.empty?
+            m = WorkMissioner.new
+            m.work_mission = @work_mission
+            if missioner[:iduser]
+              m[:IdUser] = missioner[:iduser]
+            else
+              m[:FullName] = missioner[:fullname]
+            end
+            if m.save
+              puts "saved #{m.IdWorkMissioner}"
+            else
+              puts "failed #{m.errors.full_messages}"
+            end
+          end
+        end
+        
+
+        # WorkMissioner.where(
+        #   IdWorkMission: @work_mission[:IdWorkMission],
+        #   IdUser: (existing_work_missioners - work_missioners)
+        # ).destroy_all
+
+        # (work_missioners - existing_work_missioners).each do |missioner|
+        #   m = WorkMissioner.new
+        #   m.work_mission = @work_mission
+        #   m[:IdUser] = missioner
+        #   m.save
+        # end
         render json: { message: 'Success', work_mission: @work_mission }
       else
         render json: { message: 'Failed' }
@@ -123,7 +165,7 @@ class WorkMissionController < ApplicationController
     q = "
     select
       a.IdUser,
-      b.Fname,
+      isnull(b.Fname+ ' '+ b.Lname, a.FullName) as FullName,
       b.Lname ,
       isnull(a.StartDate, c.EstimatedStartDate) as StartDate,
       isnull(a.StartDateShamsi, c.EstimatedstartdateShamsi) as StartDateShamsi,
@@ -131,11 +173,42 @@ class WorkMissionController < ApplicationController
       isnull(a.EndDate, c.EstimatedEndDate) as EndDate,
       isnull(a.EndDateShamsi, c.EstimatedEnddateShamsi) as EndDateShamsi,
       isnull(a.EndTime, c.EstimatedEndTime) as EndTime,
-      a.MissionDays,
-      ActualMissionFee,
-      MissionFeeRate
+      isnull(a.MissionDays,
+		datediff(day, a.StartDate, a.EndDate) + 1
+	  ) as MissionDays,
+      isnull(a.MissionFeeRate, 
+		case when dbo.UserRole(a.IdUser) = 2 then 130  -- CEO
+		     --when a.iduser in (select iduser from UserGroupMembers where IdGroup = 89) then 130 -- Managers
+			 else 110
+		end
+	  ) as MissionFeeRate,
+	  isnull(a.MissionFoodRate, 
+		case when dbo.UserRole(a.IdUser) = 2 then 65  -- CEO
+		     --when a.iduser in (select iduser from UserGroupMembers where IdGroup = 89) then 60 -- Managers
+			 else 65
+		end
+	  ) as MissionFoodRate,
+    (
+      isnull(a.MissionDays,
+        datediff(day, a.StartDate, a.EndDate) + 1
+      ) * 
+      (
+        isnull(a.MissionFeeRate, 
+          case when dbo.UserRole(a.IdUser) = 2 then 130  -- CEO
+            --when a.iduser in (select iduser from UserGroupMembers where IdGroup = 89) then 130 -- Managers
+            else 110
+          end
+        ) + 
+        isnull(a.MissionFoodRate, 
+          case when dbo.UserRole(a.IdUser) = 2 then 65  -- CEO
+              when a.iduser in (select iduser from UserGroupMembers where IdGroup = 89) then 60 -- Managers
+              else 65
+          end
+        )
+      )
+	  ) as ActualMissionFee
 from WorkMissioner as a
-inner join users as b on a.IdUser = b.iduser
+left join users as b on a.IdUser = b.iduser
 inner join WorkMission as c on a.IdWorkMission = c.IdWorkMission
 where a.IdWorkMission = #{params[:idmission]}
     "
@@ -150,6 +223,7 @@ where a.IdWorkMission = #{params[:idmission]}
       missioner = WorkMissioner.where(IdWorkMission: wm[:IdWorkMission], IdUser: wm['IdUser'])[0]
       missioner['ActualMissionFee'] = wm['ActualMissionFee']
       missioner.MissionFeeRate = wm['MissionFeeRate']
+      missioner.MissionFoodRate = wm['MissionFoodRate']
       missioner.MissionDays = wm['MissionDays']
       missioner.save
     end
